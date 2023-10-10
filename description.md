@@ -1,10 +1,13 @@
 # PARALLEL IN SERIAL OUT CONVERTER
 
 **Digital circuits** play a vital role in processing and manipulating data efficiently. One important component of these circuits is a shift register, which allows data to be shifted in and out in a sequential manner. Among the various types of shift registers, the Parallel-In Serial-Out (PISO) shift register offers unique functionality that is valuable in many applications.
+
 [What is PISO Shift Register?](#What-is-PISO-Shift-Register-?)
+
 [](#)
 [](#)
 [](#)
+
 # What is PISO Shift Register ?
 A PISO shift register is a digital circuit that can accept parallel data and output serial data. It is made up of a succession of flip-flops, with each flip-flop capable of storing one bit of data. Unlike PIPO shift registers, which offer parallel input and output, a PISO shift register accepts data in parallel and outputs it sequentially, or serially.
 
