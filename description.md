@@ -35,6 +35,8 @@ The process of converting serial data into parallel format. PISO shift registers
 <details>
 <summary>PISO design and explaination</summary>
 
+### CODE 
+
   ```
   module piso(
   input [7:0] in,
@@ -136,5 +138,201 @@ module piso(
 ```
 
 - `assign q = qq;`: This assigns the value of the `qq` register to the serial output `q`. This is the value that represents the data shifted through the PISO register.
+
+</details>
+<details>
+<summary>Testbench and explaination</summary>
+
+### CODE
+
+```
+module piso_tb();
+  reg ld, clk, rst, en;
+  reg [7:0] in;
+  wire [7:0] q;
+  reg [2:0] state; // Define a state variable
+
+  // Define state parameters
+  parameter IDLE = 3'b000;
+  parameter LOAD = 3'b001;
+  parameter SHIFT = 3'b010;
+
+  // Instantiate the 8-bit PISO module
+  piso dut(in, ld, clk, rst, en, q);
+
+  // Clock generation
+  initial begin
+    clk = 1;
+    forever #5 clk = ~clk;
+    
+  end
+
+  // FSM behavior
+  always @(posedge clk) begin
+    case (state)
+      IDLE: begin
+        // Initialize signals
+        rst = 1;
+        ld = 0;
+        en = 0;
+        in = 8'b0;
+        // Transition to LOAD state
+        state = LOAD;
+      end
+
+      LOAD: begin
+        // Release reset and load data
+        rst = 0;
+        ld = 1;
+        in = $random; // Load some test data
+        // Transition to SHIFT state
+        state = SHIFT;
+      end
+
+      SHIFT: begin
+        // Deassert load and let the shift register operate
+        ld = 0;
+        en = 1;
+        // Test various data patterns and control sequences
+        in = $random; // Test a different data pattern
+        in = $random; // Test another data pattern
+        // You can add more test cases here to target specific expressions
+        // Transition back to IDLE to finish simulation
+        state = IDLE;
+	end
+
+	default: state=IDLE;
+      
+    endcase
+  end
+
+  // Simulation setup
+  initial begin
+    $dumpfile("piso_tb.vcd");
+    $dumpvars(0, piso_tb);
+
+    // Initialize state to IDLE
+    state = IDLE;
+
+    // Finish simulation after a few cycles
+    #1000 $finish;
+  end
+endmodule
+```
+
+### Explaination
+
+```verilog
+module piso_tb();
+  // Input and output signals
+  reg ld, clk, rst, en;
+  reg [7:0] in;
+  wire [7:0] q;
+
+  // State variable and state parameters
+  reg [2:0] state;
+  parameter IDLE = 3'b000;
+  parameter LOAD = 3'b001;
+  parameter SHIFT = 3'b010;
+```
+
+- `reg ld, clk, rst, en;`: These are the input control signals for the PISO module. They correspond to load (`ld`), clock (`clk`), reset (`rst`), and enable (`en`) signals.
+
+- `reg [7:0] in;`: This is the input data bus representing the parallel input data that you want to feed into the PISO module.
+
+- `wire [7:0] q;`: This is the output wire representing the serial output data from the PISO module.
+
+- `reg [2:0] state;`: This is a 3-bit wide register called `state` that is used to control the state of the finite state machine (FSM) for testing.
+
+- `parameter IDLE = 3'b000;`, `parameter LOAD = 3'b001;`, `parameter SHIFT = 3'b010;`: These are parameters that define three states for the FSM: IDLE, LOAD, and SHIFT.
+
+```verilog
+  // Instantiate the 8-bit PISO module
+  piso dut(in, ld, clk, rst, en, q);
+```
+
+- `piso dut(in, ld, clk, rst, en, q);`: This instantiates the PISO module (`piso`) using the signals and ports defined in the testbench.
+
+```verilog
+  // Clock generation
+  initial begin
+    clk = 1;
+    forever #5 clk = ~clk;
+  end
+```
+
+- This section generates the clock signal (`clk`). It starts with an initial value of 1 and toggles its value every 5 time units (`#5`) to simulate a clock signal with a 50% duty cycle.
+
+```verilog
+  // FSM behavior
+  always @(posedge clk) begin
+    case (state)
+      IDLE: begin
+        // Initialize signals
+        rst = 1;
+        ld = 0;
+        en = 0;
+        in = 8'b0;
+        // Transition to LOAD state
+        state = LOAD;
+      end
+
+      LOAD: begin
+        // Release reset and load data
+        rst = 0;
+        ld = 1;
+        in = $random; // Load some test data
+        // Transition to SHIFT state
+        state = SHIFT;
+      end
+
+      SHIFT: begin
+        // Deassert load and let the shift register operate
+        ld = 0;
+        en = 1;
+        // Test various data patterns and control sequences
+        in = $random; // Test a different data pattern
+        in = $random; // Test another data pattern
+        // You can add more test cases here to target specific expressions
+        // Transition back to IDLE to finish simulation
+        state = IDLE;
+      end
+
+      default: state = IDLE;
+      
+    endcase
+  end
+```
+
+- This is the FSM behavior section. It defines the behavior of the finite state machine based on the `state` variable. The FSM goes through three states: IDLE, LOAD, and SHIFT.
+
+  - In the IDLE state, it initializes control signals, sets `rst` to 1, `ld` to 0, `en` to 0, and `in` to all zeros. Then, it transitions to the LOAD state.
+
+  - In the LOAD state, it releases the reset, sets `ld` to 1 (indicating data loading), and loads some random test data into `in`. It then transitions to the SHIFT state.
+
+  - In the SHIFT state, it deasserts `ld` to stop loading, sets `en` to 1 to enable shifting, and tests various data patterns by loading random values into `in`. After some testing, it transitions back to the IDLE state to finish the simulation.
+
+  - The `default` case is used for error handling or to reset the state machine to IDLE in case of an unexpected state.
+
+```verilog
+  // Simulation setup
+  initial begin
+    $dumpfile("piso_tb.vcd");
+    $dumpvars(0, piso_tb);
+
+    // Initialize state to IDLE
+    state = IDLE;
+
+    // Finish simulation after a few cycles
+    #1000 $finish;
+  end
+endmodule
+```
+
+- This section sets up the simulation environment:
+  - `$dumpfile("piso_tb.vcd")` and `$dumpvars(0, piso_tb)` specify that the simulation should generate a VCD (Value Change Dump) file for waveform analysis.
+  - `state = IDLE` initializes the state machine to the IDLE state.
+  - `$finish` is used to end the simulation after a certain number of time units (`#1000` in this case).
+
 
 </details>
