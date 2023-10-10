@@ -336,3 +336,185 @@ endmodule
 
 
 </details>
+<details>
+<summary>Commands required to RUN-SIMULATE-CODE_COVERAGE-SYNTHESIZE</summary>
+	
+## Steps to start CADENCE on linux
+
+&gt; create a folder in the desktop, with your srn/name
+
+&gt; open the folder
+
+&gt; right-click and create files for design and testbench,
+eg. db_fsm.v and db_tb.v
+
+&gt; right-click on the files and open them using gedit, save the design and
+testbench codes in the respective files
+
+&gt; right-click inside the folder and select open in terminal
+
+&gt; enter the following commands in the terminal
+`csh`
+
+Enters the C-Shell
+
+`source /home/&lt;install location`
+&gt; `/cshrc`
+
+&gt; Navigates to the Cadence Tools install path and starts the tool
+
+Note: You can use the upper arrow in the terminal to navigate quickly to the already used paths/commands and use tab-key to auto-complete commands.
+
+&gt; A new window appears that welcomes the user to the Cadence Design Suite,the following tools can be invoked in this window.
+
+## Simulation Tool
+
+&gt;To start reading the design and testbench files, to obtain a waveform in the Graphical User Interface (simvision), enter the following commands.
+Note: No space between +access and +rw, but mandatory space between +rw and +gui. (make sure to follow all similar spacing patterns given in the tool reference)
+
+&gt; ncverilog &lt;design&gt; &lt;testbench&gt; +access+rw +gui
+
+eg. ncverilog db_fsm.v db_tb.v +access+rw +gui
+
+Note: the +gui starts up the ncverilog GUI window.
+
+&gt; navigate through the design hierarchy and select the signals you want to
+analyze in the design browser (hold down ctrl-key while selecting), right-click
+and select send to waveform
+
+&gt; in the simvision window, select the play button, followed by the pause button
+to start and stop the simulation. The simulation will end automatically if the
+$finish statement is executed in the HDL.
+
+&gt; select the ‘=’ symbol at the top right corner of the window, to fit the
+waveform’s entirety in the same frame.
+
+&gt; drag the red marker to the beginning of the waveform and select on the ‘+’
+symbol on the top right corner, to magnify until the waveform pulses are
+visible for verifying the functionality of the design.
+
+## Code Coverage Check
+
+&gt; ncverilog design.v tb.v +access+rw +gui +nccoverage+all
+
+&gt; Check for the path of the file “cov_work” generated in the terminal then
+type:
+
+(Invoke Incisive Metrics Center)
+
+&gt;enter the command ‘imc’ in the terminal which will launch the IMC GUI.
+
+`imc`
+
+&gt; In he IMC’s Graphical User Interface, you can navigate and select the file to
+check the Code Coverage (block, branch, expression, toggle) and FSM
+Coverage, represented in percentages.
+
+## Synthesis
+
+`genus -gui`
+
+Opens the genus tool with gui, alternatively you can show and hide gui using
+command gui_show and gui_hide
+
+&gt; read_libs &lt;path of .lib file&gt;
+
+Reads library file for synthesis, from the specified path. Eg. saed90nm_typ.lib
+the 90 nanometer typical library
+
+&gt; read_hdl &lt;path of design file&gt;
+
+Reads design file to be synthesized, written in HDL (eg. verilog, systemverilog)
+
+`elaborate`
+
+Elaborates the design in the tool, and can be viewed in the GUI by selecting
+
+Hier Cell &gt; Schematic View(Module) &gt; in New.
+*For Synthesis with constraints*
+
+&gt; read_sdc &lt;path of .sdc constraints file&gt;
+
+`syn_generic`
+
+Synthesizes the design to the G Tech cells (default cells for the Cadence Tool)
+
+`syn_map`
+
+maps the synthesized cells to the library specified earlier in read_libs
+command
+
+`syn_opt -incremental`
+
+Incrementally optimizes the synthesized design
+
+&gt; report_timing &gt; (path for .rpt file to save timing report)
+
+Reports timing Time Borrowed, Uncertainty, Required Time, Launch Clock,
+Data Path and Slack.
+
+&gt; report_area &gt; (path for .rpt file to save area report)
+
+Reports area of the synthesized design in micro-meters-square
+
+&gt; report_power &gt; (path for .rpt file to save power report)
+
+Reports power in nano Watts (nW)
+
+&gt; write_hdl &gt; (path for .v file for netlist to be written)
+
+Writes the netlist in HDL format in the path specified
+
+`quit`
+
+Exits the genus tool
+
+</details>
+
+<details>
+<summary>Simulation</summary>
+
+![image](https://github.com/ShashidharReddy01/parallel_in_serial_out_converter/assets/142148810/d319914f-32ef-40ac-bc71-74daa13217e8)
+
+</details>
+
+<details>
+<summary>Elaborated schematic</summary>
+
+![image](https://github.com/ShashidharReddy01/parallel_in_serial_out_converter/assets/142148810/f765fb6d-6787-4c5d-bc44-960352e53ba0)
+
+</details>
+
+<details>
+<summary>Code Coverage</summary>
+
+![image](https://github.com/ShashidharReddy01/parallel_in_serial_out_converter/assets/142148810/d80543ad-ee44-48fc-b342-336152e01c49)
+
+
+</details>
+
+<details>
+<summary>Timing.rpt</summary>
+
+![image](https://github.com/ShashidharReddy01/parallel_in_serial_out_converter/assets/142148810/069eaaad-dd93-4435-be81-c5c933704d47)
+
+
+
+</details>
+
+<details>
+<summary>Power.rpt</summary>
+
+![image](https://github.com/ShashidharReddy01/parallel_in_serial_out_converter/assets/142148810/d179cedb-5131-4b59-b703-f9aafbc7e5d2)
+
+
+</details>
+
+<details>
+<summary>Area.rpt</summary>
+
+![image](https://github.com/ShashidharReddy01/parallel_in_serial_out_converter/assets/142148810/d0519062-f2d8-4d75-8f80-b1913d7a2e9f)
+
+
+</details>
+
