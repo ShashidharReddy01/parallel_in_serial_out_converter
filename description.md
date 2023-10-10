@@ -4,9 +4,10 @@
 - [Key Terminologies For PISO Shift Registers](#Key-Terminologies-For-PISO-Shift-Registers)
 - [](#)
 - [](#)
+
+# What is PISO Shift Register
 <details>
 <summary>What is PISO Shift Register</summary>
-# What is PISO Shift Register
 A PISO shift register is a digital circuit that can accept parallel data and output serial data. It is made up of a succession of flip-flops, with each flip-flop capable of storing one bit of data. Unlike PIPO shift registers, which offer parallel input and output, a PISO shift register accepts data in parallel and outputs it sequentially, or serially.
 </details>
 # Key Terminologies For PISO Shift Registers
