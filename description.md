@@ -33,7 +33,7 @@ The process of sending data from one device to another. PISO shift registers are
 The process of converting serial data into parallel format. PISO shift registers can be used to load serial data and then output it in parallel, enabling the interfacing between serial and parallel systems.
 </details>
 <details>
-<summary>PISO design and explaination</summary>
+<summary>PISO design and explanation</summary>
 
 ### CODE 
 
@@ -64,7 +64,7 @@ The process of converting serial data into parallel format. PISO shift registers
 endmodule
 ```
 
-### Explaination
+### Explanation
 
 
 ```verilog
@@ -141,7 +141,7 @@ module piso(
 
 </details>
 <details>
-<summary>Testbench and explaination</summary>
+<summary>Testbench and explanation</summary>
 
 ### CODE
 
@@ -220,7 +220,7 @@ module piso_tb();
 endmodule
 ```
 
-### Explaination
+### Explanation
 
 ```verilog
 module piso_tb();
